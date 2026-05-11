@@ -87,7 +87,7 @@
             text-shadow: 0 0 40px rgba(218,165,32,0.35);
         }
 
-        h1 span { color: blue; }
+        h1 span { color: orange; }
 
         .prize {
             font-size: 44px;
