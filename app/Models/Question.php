@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Question extends Model
 {
     protected $fillable = [
-        'category_id',
         'question',
+        'category_id',
         'points',
         'time_limit'
     ];
@@ -21,10 +21,5 @@ class Question extends Model
     public function answers()
     {
         return $this->hasMany(Answer::class);
-    }
-
-    public function gameQuestions()
-    {
-        return $this->hasMany(GameQuestion::class);
     }
 }

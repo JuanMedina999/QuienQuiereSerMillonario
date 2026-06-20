@@ -874,4 +874,124 @@ button[onclick="startGame()"] {
 
     .detail-row { flex-direction: column; gap: 5px; }
     .detail-label { min-width: auto; }
+
+}/* ==========================================
+   LLUVIA DE DINERO + EFECTOS PREMIUM
+========================================== */
+
+body {
+    overflow-x: hidden;
+}
+
+/* Fondo más profundo */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at top, rgba(255,215,0,0.15), transparent 40%),
+        radial-gradient(circle at bottom, rgba(255,215,0,0.08), transparent 40%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Contenedor principal más elegante */
+.game-container {
+    position: relative;
+    overflow: hidden;
+    animation: containerGlow 4s ease-in-out infinite;
+}
+
+@keyframes containerGlow {
+    0%,100%{
+        box-shadow:
+        0 25px 45px rgba(0,0,0,0.3),
+        0 0 25px rgba(255,215,0,0.15);
+    }
+    50%{
+        box-shadow:
+        0 25px 45px rgba(0,0,0,0.3),
+        0 0 45px rgba(255,215,0,0.35);
+    }
+}
+
+/* Billetes cayendo */
+.money-rain {
+    position: fixed;
+    top: -100px;
+    font-size: 24px;
+    color: rgba(255,215,0,0.4);
+    animation: fall linear infinite;
+    z-index: -1;
+    pointer-events: none;
+}
+
+@keyframes fall {
+    from {
+        transform: translateY(-100px) rotate(0deg);
+    }
+    to {
+        transform: translateY(120vh) rotate(360deg);
+    }
+}
+
+/* Título */
+h1 {
+    text-shadow:
+        0 0 15px rgba(255,215,0,0.3),
+        0 0 30px rgba(255,215,0,0.2);
+}
+
+/* Inputs */
+.form-input {
+    transition: all .25s ease !important;
+}
+
+.form-input:hover {
+    border-color: rgba(255,215,0,0.7) !important;
+}
+
+/* Categoría */
+#categorySelect {
+    cursor: pointer;
+}
+
+/* Respuestas */
+.answer-row {
+    transition: all .25s ease;
+}
+
+.answer-row:hover {
+    transform: translateX(6px);
+}
+
+/* Botones */
+.btn {
+    transition: all .25s ease;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+}
+
+/* Feedback */
+#feedback {
+    animation: feedbackPop .4s ease;
+}
+
+@keyframes feedbackPop {
+    from {
+        opacity: 0;
+        transform: scale(.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Formulario */
+#questionForm {
+    position: relative;
+    z-index: 2;
 }

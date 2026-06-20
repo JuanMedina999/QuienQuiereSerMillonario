@@ -19,37 +19,47 @@ class QuestionController extends Controller
             ], 400);
         }
 
-        $questions = Question::with('answers')
-            ->where('question', 'LIKE', "%{$query}%")
-            ->get();
+        $questions = Question::with([
+            'category',
+            'answers'
+        ])
+        ->where('question', 'LIKE', "%{$query}%")
+        ->get();
 
         return response()->json($questions);
     }
 
-    public function index()
-    {
-        return response()->json(
-            Question::with('answers')->get()
-        );
-    }
-
-  public function listarPreguntas(Request $request)
+   public function index()
 {
-    return view('questions'); 
+    return response()->json(
+        Category::with([
+            'questions.answers'
+        ])
+        ->orderBy('name')
+        ->get()
+    );
 }
+
+    public function listarPreguntas(Request $request)
+    {
+        return view('questions');
+    }
 
     public function show($id)
     {
         return response()->json(
-            Question::with('answers')->findOrFail($id)
+            Question::with([
+                'category',
+                'answers'
+            ])->findOrFail($id)
         );
     }
-
 
     public function store(Request $request)
     {
         $request->validate([
             'question' => 'required|string',
+            'category_id' => 'required|exists:categories,id',
             'points' => 'required|integer|min:0',
             'time_limit' => 'required|integer|min:10',
             'answers' => 'required|array|min:4',
@@ -67,38 +77,77 @@ class QuestionController extends Controller
 
             $question = Question::create([
                 'question' => $request->question,
+                'category_id' => $request->category_id,
                 'points' => $request->points,
                 'time_limit' => $request->time_limit
             ]);
 
             foreach ($request->answers as $index => $ans) {
+
                 Answer::create([
                     'question_id' => $question->id,
                     'answer_text' => $ans['text'],
                     'is_correct' => $index == $request->correct_index
                 ]);
+
             }
 
             return response()->json([
                 'message' => 'Pregunta creada correctamente',
-                'data' => $question->load('answers')
+                'data' => $question->load([
+                    'category',
+                    'answers'
+                ])
             ], 201);
         });
     }
+   public function update(Request $request, $id)
+{
+    $question = Question::with('answers')->findOrFail($id);
 
+    $request->validate([
+        'question' => 'required|string',
+        'category_id' => 'required|exists:categories,id',
+        'points' => 'required|integer|min:0',
+        'time_limit' => 'required|integer|min:10',
+        'answers' => 'required|array|min:4',
+        'answers.*.text' => 'required|string',
+        'correct_index' => 'required|integer|min:0'
+    ]);
 
+    DB::transaction(function () use ($request, $question) {
 
+        $question->update([
+            'question' => $request->question,
+            'category_id' => $request->category_id,
+            'points' => $request->points,
+            'time_limit' => $request->time_limit
+        ]);
+
+        foreach ($question->answers as $index => $answer) {
+
+            $answer->update([
+                'answer_text' => $request->answers[$index]['text'],
+                'is_correct' => $index == $request->correct_index
+            ]);
+        }
+
+    });
+
+    return response()->json([
+        'message' => 'Pregunta actualizada correctamente'
+    ]);
+}
     public function destroy($id)
     {
         $question = Question::findOrFail($id);
+
         $question->delete();
 
         return response()->json([
             'message' => 'Pregunta eliminada'
         ]);
     }
-
-
 
     public function checkAnswer(Request $request)
     {

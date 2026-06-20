@@ -32,7 +32,7 @@ class UsuarioController extends Controller
             'usuario' => $usuario,
         ], 200);
     }
-
+//Dios es que ni lees el codigo pa DIOSSS
     public function cerrarSesion(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
