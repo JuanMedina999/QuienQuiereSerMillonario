@@ -10,41 +10,55 @@ use Illuminate\Http\Request;
 
 class GameController extends Controller
 {
+    
     public function start(Request $request)
-    {
+{
+    $request->validate([
+        'category_id' => 'required|exists:categories,id'
+    ]);
 
-        $questions = Question::inRandomOrder()
-            ->limit(10)
-            ->get();
+    $questions = Question::where(
+            'category_id',
+            $request->category_id
+        )
+        ->inRandomOrder()
+        ->limit(10)
+        ->get();
 
-        if ($questions->count() < 10) {
-            return response()->json([
-                'error' => 'No hay suficiente preguntas. Deben existir al menos 10.'
-            ], 422);
-        }
-
-        $game = Game::create([
-            'total_questions' => 10,
-            'current_question_index' => 0,
-            'score' => 0,
-            'status' => 'playing',
-            'started_at' => now()
-        ]);
-
-        foreach ($questions as $index => $question) {
-            GameQuestion::create([
-                'game_id' => $game->id,
-                'question_id' => $question->id,
-                'question_order' => $index + 1,
-                'status' => 'pending'
-            ]);
-        }
+    if ($questions->count() < 10) {
 
         return response()->json([
-            'message' => 'Juego iniciado correctamente',
-            'game_id' => $game->id
-        ], 201);
+            'error' => 'No hay suficientes preguntas en esta categoría. Deben existir al menos 10.'
+        ], 422);
+
     }
+
+    $game = Game::create([
+        'category_id' => $request->category_id,
+        'total_questions' => 10,
+        'current_question_index' => 0,
+        'score' => 0,
+        'status' => 'playing',
+        'started_at' => now()
+    ]);
+
+    foreach ($questions as $index => $question) {
+
+        GameQuestion::create([
+            'game_id' => $game->id,
+            'question_id' => $question->id,
+            'question_order' => $index + 1,
+            'status' => 'pending'
+        ]);
+
+    }
+
+    return response()->json([
+        'message' => 'Juego iniciado correctamente',
+        'game_id' => $game->id,
+        'category_id' => $request->category_id
+    ], 201);
+}
 
     public function currentQuestion(Game $game)
     {

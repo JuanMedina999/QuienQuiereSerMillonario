@@ -24,4 +24,9 @@ Route::get('/jugar', function(){
 Route::get('/resultado', function(){
     return view('resultado');
 
+});Route::get('/admin', function () {
+    return view('admin');
+});
+Route::get('/admin', function () {
+    return view('admin');
 });

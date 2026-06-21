@@ -14,7 +14,9 @@
         <a href="/preguntas" class="btn btn-secondary" style="text-decoration:none; padding:10px 20px; font-size:0.9rem;">
             ← Volver
         </a>
-        <h1 style="margin:0; font-size:2rem;">➕ Crear Nueva Pregunta</h1>
+        <h1 style="margin:0; font-size:2rem;">➕ Crear Nueva Pregunta
+            
+        </h1>
     </div>
 
     <!-- Mensaje de feedback -->
@@ -23,16 +25,26 @@
     <form id="questionForm">
 
         <!-- Pregunta -->
-        <div class="form-group">
-            <label class="form-label">📝 Pregunta</label>
-            <input
-                type="text"
-                name="question"
-                placeholder="Escribe aquí la pregunta..."
-                class="form-input"
-                required
-            >
-        </div>
+       <!-- Pregunta -->
+<div class="form-group">
+    <label class="form-label">📝 Pregunta</label>
+    <input
+        type="text"
+        name="question"
+        placeholder="Escribe aquí la pregunta..."
+        class="form-input"
+        required
+    >   
+</div>
+
+<!-- Categoría -->
+<div class="form-group">
+    <label class="form-label">📚 Categoría</label>
+
+    <select name="category_id" id="categorySelect" class="form-input" required>
+        <option value="">Cargando categorías...</option>
+    </select>
+</div>
 
         <!-- Puntos y Tiempo -->
         <div class="form-row">
@@ -145,6 +157,37 @@ function resetForm() {
     document.querySelectorAll('.answer-row').forEach(r => r.classList.remove('answer-row--selected'));
     document.getElementById('feedback').style.display = 'none';
 }
+async function loadCategories() {
+
+    try {
+
+        const response = await fetch('/api/categories');
+
+        const categories = await response.json();
+
+        const select = document.getElementById('categorySelect');
+
+        select.innerHTML =
+            '<option value="">Seleccione una categoría</option>';
+
+        categories.forEach(category => {
+
+            select.innerHTML += `
+                <option value="${category.id}">
+                    ${category.name}
+                </option>
+            `;
+
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById('categorySelect').innerHTML =
+            '<option value="">Error cargando categorías</option>';
+    }
+}loadCategories();
 
 document.getElementById('questionForm').addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -159,13 +202,14 @@ document.getElementById('questionForm').addEventListener('submit', async functio
         return;
     }
 
-    const data = {
-        question:      form.question.value.trim(),
-        points:        parseInt(form.points.value),
-        time_limit:    parseInt(form.time_limit.value),
-        answers:       answers,
-        correct_index: parseInt(correctInput.value)
-    };
+   const data = {
+    question: form.question.value.trim(),
+    category_id: parseInt(form.category_id.value),
+    points: parseInt(form.points.value),
+    time_limit: parseInt(form.time_limit.value),
+    answers: answers,
+    correct_index: parseInt(correctInput.value)
+};
 
     const submitBtn = form.querySelector('button[type="submit"]');
     submitBtn.disabled   = true;
@@ -183,10 +227,14 @@ document.getElementById('questionForm').addEventListener('submit', async functio
         if (!response.ok) {
             showFeedback('❌ Error al guardar la pregunta. Verifica los datos.', 'incorrect');
             return;
-        }
+        }showFeedback(
+    '✅ La pregunta fue registrada exitosamente en el sistema.',
+    'correct'
+);
 
-        showFeedback('✅ ¡Pregunta creada correctamente!', 'correct');
-        resetForm();
+setTimeout(() => {
+    window.location.href = '/';
+}, 1500);
 
     } catch (error) {
         console.error(error);
@@ -197,6 +245,40 @@ document.getElementById('questionForm').addEventListener('submit', async functio
     }
 });
 </script>
+<script>
 
+/* ==================================
+   LLUVIA DE DINERO
+================================== */
+
+function createMoneyRain() {
+
+    const bill = document.createElement('div');
+
+    bill.classList.add('money-rain');
+
+    bill.innerHTML = '💵';
+
+    bill.style.left = Math.random() * window.innerWidth + 'px';
+
+    bill.style.animationDuration =
+        (Math.random() * 4 + 6) + 's';
+
+    bill.style.opacity =
+        (Math.random() * 0.4 + 0.2);
+
+    bill.style.fontSize =
+        (Math.random() * 20 + 18) + 'px';
+
+    document.body.appendChild(bill);
+
+    setTimeout(() => {
+        bill.remove();
+    }, 12000);
+}
+
+setInterval(createMoneyRain, 350);
+
+</script>
 </body>
 </html>
