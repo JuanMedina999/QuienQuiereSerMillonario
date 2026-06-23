@@ -170,4 +170,22 @@ class QuestionController extends Controller
             'correct' => $answer->is_correct
         ]);
     }
+    public function porCategoria($categoria_id)
+{
+    $questions = Question::with(['answers'])
+        ->where('category_id', $categoria_id)
+        ->get();
+
+    if ($questions->isEmpty()) {
+        return response()->json([
+            'message' => 'No hay preguntas para esta categoría',
+            'data' => []
+        ], 200);
+    }
+
+    return response()->json([
+        'message' => 'Preguntas encontradas',
+        'data' => $questions
+    ], 200);
+}
 }

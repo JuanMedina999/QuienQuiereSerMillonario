@@ -5,6 +5,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\PistaController;
 
 Route::put('/questions/{id}', [QuestionController::class, 'update']);
 Route::post('/register', [UsuarioController::class, 'registrarUsuario']);
@@ -25,6 +26,7 @@ Route::get('/questions/{id}', [QuestionController::class, 'show']);
 Route::post('/questions', [QuestionController::class, 'store']);
 Route::delete('/questions/{id}', [QuestionController::class, 'destroy']);
 Route::post('/check-answer', [QuestionController::class, 'checkAnswer']);
+Route::get('/questions/categoria/{categoria_id}', [QuestionController::class, 'porCategoria']);
 
 // Juegos
 Route::post('/games/start', [GameController::class, 'start']);
@@ -33,7 +35,10 @@ Route::post('/games/{game}/answer', [GameController::class, 'answer']);
 Route::post('/games/{game}/timeout', [GameController::class, 'timeout']);
 Route::get('/games/{game}/result', [GameController::class, 'result']);
 
-/*
+//Comodines 
+Route::post('/pistas', [PistaController::class, 'store']);
+Route::get('/pistas/{idPregunta}', [PistaController::class, 'usarPista']);
+/*  
 |--------------------------------------------------------------------------
 | Rutas protegidas
 |--------------------------------------------------------------------------

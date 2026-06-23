@@ -25,7 +25,7 @@ class GameController extends Controller
         ->limit(10)
         ->get();
 
-    if ($questions->count() < 10) {
+    if ($questions->count() < 1) {
 
         return response()->json([
             'error' => 'No hay suficientes preguntas en esta categoría. Deben existir al menos 10.'

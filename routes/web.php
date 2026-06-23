@@ -20,6 +20,9 @@ Route::get('/iniciar-juego', function () {
 Route::get('/jugar', function(){
     return view('play');
 });
+Route::get('/CrearPista', function(){
+    return view('pistaadmin');
+});
 
 Route::get('/resultado', function(){
     return view('resultado');
