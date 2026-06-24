@@ -274,6 +274,9 @@
         <button class="btn-comodin" id="btn-pista" onclick="usarPista()">
             <span class="comodin-icon">💡</span> Pista
         </button>
+        <button class="btn-comodin" id="btn-5050" onclick="useFiftyFifty()">
+    <span class="comodin-icon">🎯</span> 50/50
+</button>
     </div>
 
     <!-- Feedback -->
@@ -295,6 +298,48 @@
 </div>
 
 <script>
+
+    async function useFiftyFifty() {
+    if (!gameId) return;
+
+    try {
+        const res = await fetch('/api/game/fifty-fifty', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                game_id: gameId
+            })
+        });
+
+        const data = await res.json();
+
+        if (!data.success) {
+            alert(data.message);
+            return;
+        }
+
+        const remainingIds = data.remaining_options.map(a => a.id);
+
+        document.querySelectorAll('#answers button').forEach(btn => {
+            const id = parseInt(btn.dataset.id);
+
+            if (!remainingIds.includes(id)) {
+                btn.classList.add('btn-eliminated');
+                btn.disabled = true;
+            }
+        }); 
+
+        if (data.uses_left <= 0) {
+            document.getElementById('btn-5050').disabled = true;
+        }
+
+    } catch (error) {
+        console.error(error);
+        alert('Error usando 50/50');
+    }
+}
     // Estrellas
     const starsEl = document.getElementById('stars');
     for (let i = 0; i < 50; i++) {
@@ -429,6 +474,7 @@
     }
 
     // ── Comodín Pista ─────────────────────────────────────
+    
     async function usarPista() {
         if (pistaUsada || !questionId) return;
 
@@ -508,6 +554,6 @@
     }
 }
     loadQuestion();
-</script>
+                                </script>   
 </body>
 </html>

@@ -10,6 +10,7 @@ use App\Http\Controllers\PistaController;
 Route::put('/questions/{id}', [QuestionController::class, 'update']);
 Route::post('/register', [UsuarioController::class, 'registrarUsuario']);
 Route::post('/login', [UsuarioController::class, 'autenticar']);
+Route::post('/game/fifty-fifty', [GameController::class, 'fiftyFifty']);
 
 // Categorías
 Route::get('/categories', [CategoryController::class, 'index']);

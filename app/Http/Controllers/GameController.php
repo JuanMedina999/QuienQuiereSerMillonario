@@ -271,4 +271,61 @@ return response()->json([
                 ->get()
         ]);
     }
+public function fiftyFifty(Request $request)
+{
+    $game = Game::findOrFail($request->game_id);
+
+    if ($game->fifty_fifty_used >= 2) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Ya usaste el comodín 50/50 2 veces'
+        ], 400);
+    }
+
+    // 🔥 USAR TU SISTEMA REAL DE PREGUNTAS
+    $gameQuestion = $game->gameQuestions()
+        ->where('question_order', $game->current_question_index + 1)
+        ->with('question.answers')
+        ->first();
+
+    if (!$gameQuestion) {
+        return response()->json([
+            'success' => false,
+            'message' => 'No se encontró la pregunta actual'
+        ], 404);
+    }
+
+    $question = $gameQuestion->question;
+
+    $answers = $question->answers;
+
+    // respuesta correcta
+    $correct = $answers->where('is_correct', 1)->first();
+
+    if (!$correct) {
+        return response()->json([
+            'success' => false,
+            'message' => 'No hay respuesta correcta configurada'
+        ], 422);
+    }
+
+    // eliminar 2 incorrectas
+    $incorrect = $answers->where('is_correct', 0)->shuffle()->take(2);
+
+    $remaining = $answers->diff($incorrect)->values();
+
+    $game->fifty_fifty_used++;
+    $game->save();
+
+    return response()->json([
+        'success' => true,
+        'remaining_options' => $remaining->map(function ($a) {
+            return [
+                'id' => $a->id,
+                'answer_text' => $a->answer_text
+            ];
+        }),
+        'uses_left' => 2 - $game->fifty_fifty_used
+    ]);
+}
 }
