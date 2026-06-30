@@ -39,6 +39,7 @@ Route::get('/games/{game}/result', [GameController::class, 'result']);
 //Comodines 
 Route::post('/pistas', [PistaController::class, 'store']);
 Route::get('/pistas/{idPregunta}', [PistaController::class, 'usarPista']);
+Route::post('/games/{game}/cambiar-pregunta', [GameController::class, 'cambiarPregunta']);
 /*  
 |--------------------------------------------------------------------------
 | Rutas protegidas

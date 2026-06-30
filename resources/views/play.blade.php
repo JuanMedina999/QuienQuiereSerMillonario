@@ -48,7 +48,6 @@
             padding: 2rem 2rem 2.5rem;
         }
 
-        /* INFO SUPERIOR */
         .game-info {
             display: flex;
             justify-content: space-between;
@@ -67,7 +66,6 @@
         }
         .info-pill strong { color: #fff; }
 
-        /* PREGUNTA */
         #question {
             background: rgba(10,20,80,0.55);
             border: 1px solid rgba(218,165,32,0.25);
@@ -80,7 +78,6 @@
             margin-bottom: 1rem;
         }
 
-        /* TIMER */
         #timer-bar-container {
             height: 8px;
             background: rgba(255,255,255,0.1);
@@ -108,6 +105,7 @@
             justify-content: center;
             gap: 10px;
             margin-bottom: 1rem;
+            flex-wrap: wrap;
         }
         .btn-comodin {
             display: flex;
@@ -147,16 +145,12 @@
             margin-bottom: 1rem;
             letter-spacing: .05em;
         }
-        .feedback-correct  { background: rgba(76,175,80,0.15);  color: #4CAF50; border: 1px solid rgba(76,175,80,0.3);  }
-        .feedback-incorrect { background: rgba(244,67,54,0.15); color: #f44336; border: 1px solid rgba(244,67,54,0.3); }
-        .feedback-timeout  { background: rgba(255,152,0,0.15);  color: #ff9800; border: 1px solid rgba(255,152,0,0.3);  }
+        .feedback-correct   { background: rgba(76,175,80,0.15);  color: #4CAF50; border: 1px solid rgba(76,175,80,0.3);  }
+        .feedback-incorrect { background: rgba(244,67,54,0.15);  color: #f44336; border: 1px solid rgba(244,67,54,0.3); }
+        .feedback-timeout   { background: rgba(255,152,0,0.15);  color: #ff9800; border: 1px solid rgba(255,152,0,0.3);  }
 
         /* RESPUESTAS */
-        #answers {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+        #answers { display: flex; flex-direction: column; gap: 10px; }
         #answers button {
             display: flex;
             align-items: center;
@@ -178,75 +172,52 @@
         }
         #answers button:disabled { cursor: not-allowed; }
         #answers button .letter {
-            width: 30px;
-            height: 30px;
+            width: 30px; height: 30px;
             border-radius: 50%;
             border: 2px solid #daa520;
             color: #daa520;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 13px;
-            flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 13px; flex-shrink: 0;
         }
-        .btn-correct { background: rgba(76,175,80,0.2)  !important; border-color: #4CAF50 !important; }
-        .btn-incorrect { background: rgba(244,67,54,0.2) !important; border-color: #f44336 !important; }
-        .btn-eliminated { opacity: 0.25 !important; }
+        .btn-correct   { background: rgba(76,175,80,0.2)  !important; border-color: #4CAF50 !important; }
+        .btn-incorrect { background: rgba(244,67,54,0.2)  !important; border-color: #f44336 !important; }
+        .btn-eliminated { opacity: 0.2 !important; pointer-events: none !important; }
 
-        /* MODAL PISTA */
-        #modal-pista {
+        /* MODALES */
+        .modal-overlay {
             display: none;
-            position: fixed;
-            inset: 0;
+            position: fixed; inset: 0;
             background: rgba(0,0,0,0.8);
-            align-items: center;
-            justify-content: center;
+            align-items: center; justify-content: center;
             z-index: 100;
         }
-        #modal-pista.show { display: flex; }
-        #modal-pista-content {
+        .modal-overlay.show { display: flex; }
+        .modal-box {
             background: #0e0c08;
             border: 1px solid #daa520;
             border-radius: 14px;
             padding: 2rem 2rem 1.5rem;
-            max-width: 420px;
-            width: 90%;
+            max-width: 420px; width: 90%;
             text-align: center;
             box-shadow: 0 0 40px rgba(218,165,32,0.15);
         }
-        .modal-icon { font-size: 36px; margin-bottom: 0.8rem; }
-        .modal-title {
-            color: #daa520;
-            font-size: 14px;
-            letter-spacing: .15em;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-        }
-        #modal-pista-texto {
-            color: #e8d898;
-            font-size: 16px;
-            line-height: 1.7;
+        .modal-icon  { font-size: 36px; margin-bottom: 0.8rem; }
+        .modal-title { color: #daa520; font-size: 14px; letter-spacing: .15em; text-transform: uppercase; margin-bottom: 1rem; }
+        .modal-body  {
+            color: #e8d898; font-size: 16px; line-height: 1.7;
             background: rgba(218,165,32,0.05);
             border: 1px solid rgba(218,165,32,0.15);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1.2rem;
+            border-radius: 8px; padding: 1rem; margin-bottom: 1.2rem;
         }
-        #modal-pista-content button {
+        .modal-box button {
             background: linear-gradient(135deg, #b8860b, #daa520);
-            color: #0a0a1a;
-            border: none;
-            padding: 10px 28px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 13px;
-            letter-spacing: .1em;
-            text-transform: uppercase;
-            transition: opacity .2s;
+            color: #0a0a1a; border: none;
+            padding: 10px 28px; border-radius: 8px;
+            cursor: pointer; font-weight: 700;
+            font-size: 13px; letter-spacing: .1em;
+            text-transform: uppercase; transition: opacity .2s;
         }
-        #modal-pista-content button:hover { opacity: 0.85; }
+        .modal-box button:hover { opacity: 0.85; }
     </style>
 </head>
 <body>
@@ -255,17 +226,14 @@
 
 <div class="game-container">
 
-    <!-- Info superior -->
     <div class="game-info">
         <span class="info-pill">Puntos acumulados: <strong id="total-score">0</strong></span>
         <span class="info-pill">Pregunta: <strong id="question-number">1 / 10</strong></span>
         <span class="info-pill">Puntos de esta pregunta: <strong id="points" style="color:#FFD700">0</strong></span>
     </div>
 
-    <!-- Pregunta -->
     <div id="question">Cargando pregunta...</div>
 
-    <!-- Timer -->
     <div id="timer-bar-container"><div id="timer-bar"></div></div>
     <div class="timer-label">Tiempo restante: <span id="time">--</span>s</div>
 
@@ -274,72 +242,43 @@
         <button class="btn-comodin" id="btn-pista" onclick="usarPista()">
             <span class="comodin-icon">💡</span> Pista
         </button>
-        <button class="btn-comodin" id="btn-5050" onclick="useFiftyFifty()">
-    <span class="comodin-icon">🎯</span> 50/50
-</button>
+        <button class="btn-comodin" id="btn-cambio" onclick="cambiarPregunta()">
+            <span class="comodin-icon">🔄</span> Cambiar Pregunta
+        </button>
+        <button class="btn-comodin" id="btn-5050" onclick="usarCincuentaCincuenta()">
+            <span class="comodin-icon">🎯</span> 50/50
+        </button>
     </div>
 
-    <!-- Feedback -->
     <div id="feedback"></div>
-
-    <!-- Respuestas -->
     <div id="answers"></div>
 
 </div>
 
 <!-- Modal Pista -->
-<div id="modal-pista">
-    <div id="modal-pista-content">
+<div class="modal-overlay" id="modal-pista">
+    <div class="modal-box">
         <div class="modal-icon">💡</div>
         <div class="modal-title">Comodín — Pista</div>
-        <div id="modal-pista-texto"></div>
-        <button onclick="cerrarPista()">Entendido</button>
+        <div class="modal-body" id="modal-pista-texto"></div>
+        <button onclick="cerrarModal('modal-pista')">Entendido</button>
+    </div>
+</div>
+
+<!-- Modal Cambiar Pregunta -->
+<div class="modal-overlay" id="modal-cambio">
+    <div class="modal-box">
+        <div class="modal-icon">🔄</div>
+        <div class="modal-title">Comodín — Cambiar Pregunta</div>
+        <div class="modal-body">¿Estás seguro de que quieres cambiar esta pregunta? <br><strong style="color:#daa520">Solo puedes hacerlo una vez.</strong></div>
+        <div style="display:flex;gap:10px;justify-content:center;">
+            <button onclick="confirmarCambio()">Sí, cambiar</button>
+            <button onclick="cerrarModal('modal-cambio')" style="background:rgba(255,255,255,0.1);color:#fff;">Cancelar</button>
+        </div>
     </div>
 </div>
 
 <script>
-
-    async function useFiftyFifty() {
-    if (!gameId) return;
-
-    try {
-        const res = await fetch('/api/game/fifty-fifty', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                game_id: gameId
-            })
-        });
-
-        const data = await res.json();
-
-        if (!data.success) {
-            alert(data.message);
-            return;
-        }
-
-        const remainingIds = data.remaining_options.map(a => a.id);
-
-        document.querySelectorAll('#answers button').forEach(btn => {
-            const id = parseInt(btn.dataset.id);
-
-            if (!remainingIds.includes(id)) {
-                btn.classList.add('btn-eliminated');
-                btn.disabled = true;
-            }
-        }); 
-
-        if (data.uses_left <= 0) {
-            document.getElementById('btn-5050').disabled = true;
-        }
-
-    } catch (error) {
-        console.error(error);
-        alert('Error usando 50/50');
-    }
-}
     // Estrellas
     const starsEl = document.getElementById('stars');
     for (let i = 0; i < 50; i++) {
@@ -355,19 +294,25 @@
 
     const LETTERS = ['A', 'B', 'C', 'D'];
     let countdownInterval = null;
-    let timeLimit  = 0;
-    let timeSpent  = 0;
-    let answered   = false;
-    let questionId = null;
-    let pistaUsada = false;
+    let timeLimit   = 0;
+    let timeSpent   = 0;
+    let answered    = false;
+    let questionId  = null;
+    let pistaUsada  = false;
+    let cambioUsado = false;
+    let cincuentaUsado = false;
 
     // ── Carga pregunta ────────────────────────────────────
     async function loadQuestion() {
-        answered  = false;
+        answered   = false;
         pistaUsada = false;
         clearTimer();
         hideFeedback();
-        document.getElementById('btn-pista').disabled = false;
+
+        // Reactivar pista en cada pregunta (pero no cambio ni 50/50)
+        if (!pistaUsada) document.getElementById('btn-pista').disabled = false;
+        if (cambioUsado) document.getElementById('btn-cambio').disabled = true;
+        if (cincuentaUsado) document.getElementById('btn-5050').disabled = true;
 
         try {
             const res  = await fetch(`/api/games/${gameId}/current-question`);
@@ -394,10 +339,9 @@
 
         data.answers.forEach((ans, index) => {
             const btn = document.createElement('button');
-            btn.dataset.id     = ans.id;
-            btn.dataset.letter = LETTERS[index] ?? (index + 1);
-            btn.innerHTML      = `<span class="letter">${LETTERS[index] ?? index+1}</span>${ans.answer_text}`;
-            btn.onclick        = () => sendAnswer(ans.id);
+            btn.dataset.id = ans.id;
+            btn.innerHTML  = `<span class="letter">${LETTERS[index] ?? index+1}</span>${ans.answer_text}`;
+            btn.onclick    = () => sendAnswer(ans.id);
             container.appendChild(btn);
         });
     }
@@ -474,35 +418,70 @@
     }
 
     // ── Comodín Pista ─────────────────────────────────────
-    
     async function usarPista() {
         if (pistaUsada || !questionId) return;
-
         try {
-            const res  = await fetch(`/api/pistas/${questionId}`);
+            const res  = await fetch(`/api/pistas/${questionId}?game_id=${gameId}`);
             const data = await res.json();
-
-            if (!res.ok) {
-                alert('Esta pregunta no tiene pista disponible');
-                return;
-            }
-
+            if (!res.ok) { alert(data.message || 'Esta pregunta no tiene pista disponible'); return; }
             pistaUsada = true;
             document.getElementById('btn-pista').disabled = true;
             document.getElementById('modal-pista-texto').innerText = data.data.pista;
             document.getElementById('modal-pista').classList.add('show');
-
-        } catch (e) {
-            console.error(e);
-            alert('Error al obtener la pista');
-        }
+        } catch (e) { console.error(e); alert('Error al obtener la pista'); }
     }
 
-    function cerrarPista() {
-        document.getElementById('modal-pista').classList.remove('show');
+    // ── Comodín Cambiar Pregunta ──────────────────────────
+    function cambiarPregunta() {
+        if (cambioUsado || answered) return;
+        document.getElementById('modal-cambio').classList.add('show');
+    }
+
+    async function confirmarCambio() {
+        cerrarModal('modal-cambio');
+        try {
+            const res  = await fetch(`/api/games/${gameId}/cambiar-pregunta`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await res.json();
+            if (!res.ok) { alert(data.message || 'No puedes usar este comodín'); return; }
+            cambioUsado = true;
+            document.getElementById('btn-cambio').disabled = true;
+            clearTimer();
+            hideFeedback();
+            answered = false;
+            renderQuestion(data);
+            startTimer(data.time_limit);
+        } catch (e) { console.error(e); alert('Error al cambiar la pregunta'); }
+    }
+
+    // ── Comodín 50/50 ─────────────────────────────────────
+    async function usarCincuentaCincuenta() {
+        if (cincuentaUsado || answered || !questionId) return;
+        try {
+            const res  = await fetch(`/api/games/${gameId}/fifty-fifty`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question_id: questionId })
+            });
+            const data = await res.json();
+            if (!res.ok) { alert(data.message || 'No puedes usar este comodín'); return; }
+            cincuentaUsado = true;
+            document.getElementById('btn-5050').disabled = true;
+            const remainingIds = data.remaining_options.map(a => a.id);
+            document.querySelectorAll('#answers button').forEach(btn => {
+                if (!remainingIds.includes(parseInt(btn.dataset.id))) {
+                    btn.classList.add('btn-eliminated');
+                    btn.disabled = true;
+                }
+            });
+        } catch (e) { console.error(e); alert('Error usando 50/50'); }
     }
 
     // ── Helpers UI ────────────────────────────────────────
+    function cerrarModal(id) { document.getElementById(id).classList.remove('show'); }
+
     function disableAnswerButtons() {
         document.querySelectorAll('#answers button').forEach(btn => btn.disabled = true);
     }
@@ -531,29 +510,7 @@
         window.location.href = '/resultado';
     }
 
-    async function usarPista() {
-    if (pistaUsada || !questionId) return;
-
-    try {
-        const res = await fetch(`/api/pistas/${questionId}?game_id=${gameId}`);
-        const data = await res.json();
-
-        if (!res.ok) {
-            alert(data.message || 'No puedes usar la pista');
-            return;
-        }
-
-        pistaUsada = true;
-        document.getElementById('btn-pista').disabled = true;
-        document.getElementById('modal-pista-texto').innerText = data.data.pista;
-        document.getElementById('modal-pista').classList.add('show');
-
-    } catch (e) {
-        console.error(e);
-        alert('Error al obtener la pista');
-    }
-}
     loadQuestion();
-                                </script>   
+</script>
 </body>
 </html>

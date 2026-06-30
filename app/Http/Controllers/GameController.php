@@ -328,4 +328,60 @@ public function fiftyFifty(Request $request)
         'uses_left' => 2 - $game->fifty_fifty_used
     ]);
 }
+
+public function cambiarPregunta(Request $request, Game $game)
+{
+    if ($game->status === 'finished') {
+        return response()->json(['message' => 'El juego ya terminó'], 422);
+    }
+
+    if ($game->cambio_pregunta_usado) {
+        return response()->json(['message' => 'Ya usaste el comodín de cambio de pregunta'], 422);
+    }
+
+    $gameQuestion = $game->gameQuestions()
+        ->where('question_order', $game->current_question_index + 1)
+        ->first();
+
+    if (!$gameQuestion) {
+        return response()->json(['message' => 'Pregunta no encontrada'], 404);
+    }
+
+    // Obtener IDs de preguntas ya usadas en esta partida
+    $usedIds = $game->gameQuestions()->pluck('question_id')->toArray();
+
+    // Buscar una pregunta nueva de la misma categoría
+    $nuevaPregunta = Question::where('category_id', $game->category_id)
+        ->whereNotIn('id', $usedIds)
+        ->inRandomOrder()
+        ->first();
+
+    if (!$nuevaPregunta) {
+        return response()->json(['message' => 'No hay preguntas disponibles para cambiar'], 422);
+    }
+
+    // Reemplazar la pregunta actual
+    $gameQuestion->update([
+        'question_id' => $nuevaPregunta->id,
+        'status' => 'pending'
+    ]);
+
+    $game->cambio_pregunta_usado = true;
+    $game->save();
+
+    return response()->json([
+        'message' => 'Pregunta cambiada correctamente',
+        'question_number' => $gameQuestion->question_order,
+        'question_id' => $nuevaPregunta->id,
+        'question' => $nuevaPregunta->question,
+        'points' => $nuevaPregunta->points,
+        'time_limit' => $nuevaPregunta->time_limit,
+        'answers' => $nuevaPregunta->answers->map(function ($answer) {
+            return [
+                'id' => $answer->id,
+                'answer_text' => $answer->answer_text
+            ];
+        })->values()
+    ], 200);
+}
 }
